@@ -27,7 +27,7 @@ def main():
 
 	XTr = np.zeros((len(tweetDict), c+1))
 	YTr = np.zeros(len(tweetDict))
-	for i,tweetId,tweet in enumerate(tweetDict.items()):
+	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
 		YTr[i] = tweet[-2]
 		for tw in tWords:
@@ -37,7 +37,9 @@ def main():
 				XTr[i][c] = 1
 
 	print(XTr)
+	print(XTr.shape, len(tweetDict),c)
 	print(YTr)
+	print(YTr.shape)
 		 
 
 if __name__ == '__main__':
