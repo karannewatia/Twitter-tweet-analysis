@@ -8,4 +8,4 @@ Possible feature ideas-
 4. Misspelt words
 5. Use of hashtags
 6. Use of links
-7. 
+7. Time of tweet
