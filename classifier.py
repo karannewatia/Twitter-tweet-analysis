@@ -1,6 +1,7 @@
 import csv
 import nltk
 import numpy as np
+from sklearn.naive_bayes import MultinomialNB
 
 def main():
 
@@ -21,7 +22,7 @@ def main():
 			words = nltk.word_tokenize(text)
 			for w in words:
 				if not(w.lower() in wordDict):
-					wordDict[w.lower()] = c 
+					wordDict[w.lower()] = c
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
@@ -32,15 +33,24 @@ def main():
 		YTr[i] = tweet[-2]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTr[i][wordDict[tw.lower()]] = 1 
+				XTr[i][wordDict[tw.lower()]] = 1
 			else:
 				XTr[i][c] = 1
 
-	print(XTr)
-	print(XTr.shape, len(tweetDict),c)
-	print(YTr)
-	print(YTr.shape)
-		 
+	indices = np.array(range(len(tweetDict)))
+	np.random.shuffle(indices)
+	XTr = XTr[indices]
+	YTr = YTr[indices]
+	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	YTr20 = YTr[int(0.8*len(tweetDict)):]
+
+	clf = MultinomialNB()
+	clf.fit(XTr80, YTr80)
+	preds = clf.predict(XTr20)
+	temp = (np.equal(preds,YTr20))
+	#print(np.sum(temp)/temp.shape)
 
 if __name__ == '__main__':
 	main()
