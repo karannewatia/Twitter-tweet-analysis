@@ -1,4 +1,5 @@
 import csv
+import nltk
 
 def main():
 
@@ -14,10 +15,12 @@ def main():
 				continue
 			tweet = tweet[0].strip('[').strip(']').split(',')
 			id, text, favCount, created, retCount, label = tweet[0],tweet[1],tweet[3],tweet[5],tweet[12],tweet[17]
-			tweetDict[id] = [text, favCount, created, retCount, label]
+			words = nltk.word_tokenize(text)
+			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
 	for tweetId,tweet in tweetDict.items():
-		print(tweetId + ": " + tweet[0])
+		print(tweetId + ": ")
+		print(tweet[-1])
 
 
 
