@@ -27,7 +27,7 @@ def main():
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
-	XTr = np.zeros((len(tweetDict), c+7))
+	XTr = np.zeros((len(tweetDict), c+1))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -38,17 +38,17 @@ def main():
 			else:
 				XTr[i][c] = 1
 		tStr = tweet[0]
-		if tStr.find("\"") != -1:
-			XTr[i][c+1] = 1
-		if tStr.find("https") != -1:
-			XTr[i][c+2] = 1
-		if tStr.find("#") != -1:
-			XTr[i][c+3] = 1
-		sid = SentimentIntensityAnalyzer()
-		sentiments = sid.polarity_scores(tStr)
-		XTr[i][c+4] = sentiments['pos']
-		XTr[i][c+5] = sentiments['neg']
-		XTr[i][c+6] = sentiments['neu']
+		# if tStr.find("\"") != -1:
+		# 	XTr[i][c+1] = 1
+		# if tStr.find("https") != -1:
+		# 	XTr[i][c+2] = 1
+		# if tStr.find("#") != -1:
+		# # 	XTr[i][c+3] = 1
+		# sid = SentimentIntensityAnalyzer()
+		# sentiments = sid.polarity_scores(tStr)
+		# XTr[i][c+1] = round(sentiments['pos'])
+		# XTr[i][c+2] = round(sentiments['neg'])
+		# XTr[i][c+3] = round(sentiments['neu'])
 		# s = tweet[2]
 		# hr = ((s.split(' '))[1].split(':'))[0]
 		# if hr in range(0,10):
@@ -79,7 +79,7 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+7))
+	XTe = np.zeros((len(testTweetDict), c+1))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
@@ -88,17 +88,17 @@ def main():
 			else:
 				XTe[i][c] = 1
 		tStr = tweet[0]
-		if tStr.find("\"") != -1:
-			XTr[i][c+1] = 1
-		if tStr.find("https") != -1:
-			XTr[i][c+2] = 1
-		if tStr.find("#") != -1:
-			XTr[i][c+3] = 1
-		sid = SentimentIntensityAnalyzer()
-		sentiments = sid.polarity_scores(tStr)
-		XTr[i][c+4] = sentiments['pos']
-		XTr[i][c+5] = sentiments['neg']
-		XTr[i][c+6] = sentiments['neu']
+		# if tStr.find("\"") != -1:
+		# 	XTr[i][c+1] = 1
+		# if tStr.find("https") != -1:
+		# 	XTr[i][c+2] = 1
+		# if tStr.find("#") != -1:
+		# 	XTr[i][c+3] = 1
+		# sid = SentimentIntensityAnalyzer()
+		# sentiments = sid.polarity_scores(tStr)
+		# XTr[i][c+1] = round(sentiments['pos'])
+		# XTr[i][c+2] = round(sentiments['neg'])
+		# XTr[i][c+3] = round(sentiments['neu'])
 		# s = tweet[2]
 		# hr = ((s.split(' '))[1].split(':'))[0]
 		# if hr in range(0,10):
@@ -112,26 +112,26 @@ def main():
 
 
 	#print(XTe[0])
-	fiftyAvg = 0
-	for i in range(100):
-		indices = np.array(range(len(tweetDict)))
-		np.random.shuffle(indices)
-		XTr = XTr[indices]
-		YTr = YTr[indices]
-		XTr80 = XTr[:int(0.8*len(tweetDict))]
-		YTr80 = YTr[:int(0.8*len(tweetDict))]
-		XTr20 = XTr[int(0.8*len(tweetDict)):]
-		YTr20 = YTr[int(0.8*len(tweetDict)):]
+	# fiftyAvg = 0
+	# for i in range(100):
+	# 	indices = np.array(range(len(tweetDict)))
+	# 	np.random.shuffle(indices)
+	# 	XTr = XTr[indices]
+	# 	YTr = YTr[indices]
+	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-		clf = MultinomialNB()
-		clf.fit(XTr80, YTr80)
-		preds = clf.predict(XTr20)
-		#print(preds)
-		temp = (np.equal(preds,YTr20))
-		fiftyAvg += (np.sum(temp)/temp.shape)
-	fiftyAvg/=100
+	# 	clf = MultinomialNB()
+	# 	clf.fit(XTr80, YTr80)
+	# 	preds = clf.predict(XTr20)
+	# 	#print(preds)
+	# 	temp = (np.equal(preds,YTr20))
+	# 	fiftyAvg += (np.sum(temp)/temp.shape)
+	# fiftyAvg/=100
 
-	print(fiftyAvg)
+	# print(fiftyAvg)
 
 	clf = MultinomialNB()
 	clf.fit(XTr, YTr)
@@ -142,7 +142,7 @@ def main():
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	with open('outputMult.csv', 'w') as testfile:
+	with open('outputMultOrig.csv', 'w') as testfile:
 		filewriter = csv.writer(testfile, delimiter=',')
 		filewriter.writerow(['ID','Label'])
 		for i, (id,pred) in enumerate(zip(idList,preds)):
