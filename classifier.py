@@ -113,30 +113,30 @@ def main():
 
 
 	#print(XTe[0])
-	fiftyAvg = 0
-	for i in range(100):
-		indices = np.array(range(len(tweetDict)))
-		np.random.shuffle(indices)
-		XTr = XTr[indices]
-		YTr = YTr[indices]
-		XTr80 = XTr[:int(0.8*len(tweetDict))]
-		YTr80 = YTr[:int(0.8*len(tweetDict))]
-		XTr20 = XTr[int(0.8*len(tweetDict)):]
-		YTr20 = YTr[int(0.8*len(tweetDict)):]
+	#fiftyAvg = 0
+	#for i in range(100):
+	#	indices = np.array(range(len(tweetDict)))
+	#	np.random.shuffle(indices)
+	#	XTr = XTr[indices]
+	#	YTr = YTr[indices]
+	#	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	#	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	#	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	#	YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-		clf = MultinomialNB()
-		clf.fit(XTr80, YTr80)
-		preds = clf.predict(XTr20)
+	#	clf = MultinomialNB()
+	#	clf.fit(XTr80, YTr80)
+	#	preds = clf.predict(XTr20)
 		#print(preds)
-		temp = (np.equal(preds,YTr20))
-		fiftyAvg += (np.sum(temp)/temp.shape)
-	fiftyAvg/=100
+	#	temp = (np.equal(preds,YTr20))
+	#	fiftyAvg += (np.sum(temp)/temp.shape)
+	#fiftyAvg/=100
 
-	print(fiftyAvg)
+	#print(fiftyAvg)
 
-	# clf = MultinomialNB()
-	# clf.fit(XTr, YTr)
-	# preds = clf.predict(XTe)
+	clf = MultinomialNB()
+	clf.fit(XTr, YTr)
+	preds = clf.predict(XTe)
 	#print(preds)
 
 	#print(preds)
