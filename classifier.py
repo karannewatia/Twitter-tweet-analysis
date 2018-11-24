@@ -27,7 +27,7 @@ def main():
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
-	XTr = np.zeros((len(tweetDict), c+1))
+	XTr = np.zeros((len(tweetDict), c+11))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -38,27 +38,27 @@ def main():
 			else:
 				XTr[i][c] = 1
 		tStr = tweet[0]
-		# if tStr.find("\"") != -1:
-		# 	XTr[i][c+1] = 1
-		# if tStr.find("https") != -1:
-		# 	XTr[i][c+2] = 1
-		# if tStr.find("#") != -1:
-		# # 	XTr[i][c+3] = 1
-		# sid = SentimentIntensityAnalyzer()
-		# sentiments = sid.polarity_scores(tStr)
-		# XTr[i][c+1] = round(sentiments['pos'])
-		# XTr[i][c+2] = round(sentiments['neg'])
-		# XTr[i][c+3] = round(sentiments['neu'])
-		# s = tweet[2]
-		# hr = ((s.split(' '))[1].split(':'))[0]
-		# if hr in range(0,10):
-		# 	XTr[i][c+7] = 1
-		# elif hr in range(10,17):
-		# 	XTr[i][c+8] = 1
-		# elif hr in range(17,21):
-		# 	XTr[i][c+9] = 1
-		# else:
-		# 	XTr[i][c+10] = 1
+		if tStr.find("\"") != -1:
+			XTr[i][c+1] = 1
+		if tStr.find("https") != -1:
+			XTr[i][c+2] = 1
+		if tStr.find("#") != -1:
+			XTr[i][c+3] = 1
+		sid = SentimentIntensityAnalyzer()
+		sentiments = sid.polarity_scores(tStr)
+		XTr[i][c+4] = round(sentiments['pos'])
+		XTr[i][c+5] = round(sentiments['neg'])
+		XTr[i][c+6] = round(sentiments['neu'])
+		s = tweet[2]
+		hr = ((s.split(' '))[1].split(':'))[0]
+		if hr in range(0,10):
+			XTr[i][c+7] = 1
+		elif hr in range(10,17):
+			XTr[i][c+8] = 1
+		elif hr in range(17,21):
+			XTr[i][c+9] = 1
+		else:
+			XTr[i][c+10] = 1
 
 
 
@@ -79,36 +79,36 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+1))
+	XTe = np.zeros((len(testTweetDict), c+11))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTr[i][wordDict[tw.lower()]] = 1
+				XTe[i][wordDict[tw.lower()]] = 1
 			else:
 				XTe[i][c] = 1
 		tStr = tweet[0]
-		# if tStr.find("\"") != -1:
-		# 	XTr[i][c+1] = 1
-		# if tStr.find("https") != -1:
-		# 	XTr[i][c+2] = 1
-		# if tStr.find("#") != -1:
-		# 	XTr[i][c+3] = 1
-		# sid = SentimentIntensityAnalyzer()
-		# sentiments = sid.polarity_scores(tStr)
-		# XTr[i][c+1] = round(sentiments['pos'])
-		# XTr[i][c+2] = round(sentiments['neg'])
-		# XTr[i][c+3] = round(sentiments['neu'])
-		# s = tweet[2]
-		# hr = ((s.split(' '))[1].split(':'))[0]
-		# if hr in range(0,10):
-		# 	XTr[i][c+7] = 1
-		# elif hr in range(10,17):
-		# 	XTr[i][c+8] = 1
-		# elif hr in range(17,21):
-		# 	XTr[i][c+9] = 1
-		# else:
-		# 	XTr[i][c+10] = 1
+		if tStr.find("\"") != -1:
+			XTe[i][c+1] = 1
+		if tStr.find("https") != -1:
+			XTe[i][c+2] = 1
+		if tStr.find("#") != -1:
+			XTe[i][c+3] = 1
+		sid = SentimentIntensityAnalyzer()
+		sentiments = sid.polarity_scores(tStr)
+		XTe[i][c+4] = round(sentiments['pos'])
+		XTe[i][c+5] = round(sentiments['neg'])
+		XTe[i][c+6] = round(sentiments['neu'])
+		s = tweet[2]
+		hr = ((s.split(' '))[1].split(':'))[0]
+		if hr in range(0,10):
+			XTe[i][c+7] = 1
+		elif hr in range(10,17):
+			XTe[i][c+8] = 1
+		elif hr in range(17,21):
+			XTe[i][c+9] = 1
+		else:
+			XTe[i][c+10] = 1
 
 
 	#print(XTe[0])
@@ -142,7 +142,7 @@ def main():
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	with open('outputMultOrig.csv', 'w') as testfile:
+	with open('outputMark2.csv', 'w') as testfile:
 		filewriter = csv.writer(testfile, delimiter=',')
 		filewriter.writerow(['ID','Label'])
 		for i, (id,pred) in enumerate(zip(idList,preds)):
