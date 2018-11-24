@@ -50,6 +50,7 @@ def main():
 				continue
 			tweet = tweet[0].strip('[').strip(']').split(',')
 			id, text, favCount, created, retCount = tweet[0],tweet[1],tweet[3],tweet[5],tweet[12]
+			words = nltk.word_tokenize(text)
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
@@ -65,10 +66,10 @@ def main():
 
 	#print(XTe[0])
 	
-	# indices = np.array(range(len(tweetDict)))
-	# np.random.shuffle(indices)
-	# XTr = XTr[indices]
-	# YTr = YTr[indices]
+	indices = np.array(range(len(tweetDict)))
+	np.random.shuffle(indices)
+	XTr = XTr[indices]
+	YTr = YTr[indices]
 	# XTr80 = XTr[:int(0.8*len(tweetDict))]
 	# YTr80 = YTr[:int(0.8*len(tweetDict))]
 	# XTr20 = XTr[int(0.8*len(tweetDict)):]
@@ -84,17 +85,17 @@ def main():
 	clf = MultinomialNB()
 	clf.fit(XTr, YTr)
 	preds = clf.predict(XTe)
-	print(preds)
+	#print(preds)
 
 	#print(preds)
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	# with open('output.csv', 'w') as testfile:
-	# 	filewriter = csv.writer(testfile, delimiter=',')
-	# 	filewriter.writerow(['ID','Label'])
-	# 	for i, (id,pred) in enumerate(zip(idList,preds)):
-	# 		filewriter.writerow([id,int(pred)])
+	with open('output.csv', 'w') as testfile:
+		filewriter = csv.writer(testfile, delimiter=',')
+		filewriter.writerow(['ID','Label'])
+		for i, (id,pred) in enumerate(zip(idList,preds)):
+			filewriter.writerow([id,int(pred)])
 
 if __name__ == '__main__':
 	main()
