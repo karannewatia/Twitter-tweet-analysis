@@ -29,7 +29,7 @@ def main():
 
 	
 
-	XTr = np.zeros((len(tweetDict), c+4+4))
+	XTr = np.zeros((len(tweetDict), c+4))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -46,16 +46,16 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
-		str = tweet[2]
-		hr = ((str.split(' '))[1].split(':'))[0]
-		if hr in range(0,10):
-			XTr[i][c+4] = 1
-		elif hr in range(10,17):
-			XTr[i][c+5] = 1
-		elif hr in range(17,21):
-			XTr[i][c+6] = 1
-		else:
-			XTr[i][c+7] = 1
+		# s = tweet[2]
+		# hr = ((s.split(' '))[1].split(':'))[0]
+		# if hr in range(0,10):
+		# 	XTr[i][c+4] = 1
+		# elif hr in range(10,17):
+		# 	XTr[i][c+5] = 1
+		# elif hr in range(17,21):
+		# 	XTr[i][c+6] = 1
+		# else:
+		# 	XTr[i][c+7] = 1
 
 
 
@@ -76,7 +76,7 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+4+4))
+	XTe = np.zeros((len(testTweetDict), c+4))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
@@ -92,35 +92,39 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
-		str = tweet[2]
-		hr = ((str.split(' '))[1].split(':'))[0]
-		if hr in range(0,10):
-			XTr[i][c+4] = 1
-		elif hr in range(10,17):
-			XTr[i][c+5] = 1
-		elif hr in range(17,21):
-			XTr[i][c+6] = 1
-		else:
-			XTr[i][c+7] = 1
+		# s = tweet[2]
+		# hr = ((s.split(' '))[1].split(':'))[0]
+		# if hr in range(0,10):
+		# 	XTr[i][c+4] = 1
+		# elif hr in range(10,17):
+		# 	XTr[i][c+5] = 1
+		# elif hr in range(17,21):
+		# 	XTr[i][c+6] = 1
+		# else:
+		# 	XTr[i][c+7] = 1
 
 
 	#print(XTe[0])
-	
-	indices = np.array(range(len(tweetDict)))
-	np.random.shuffle(indices)
-	XTr = XTr[indices]
-	YTr = YTr[indices]
-	XTr80 = XTr[:int(0.8*len(tweetDict))]
-	YTr80 = YTr[:int(0.8*len(tweetDict))]
-	XTr20 = XTr[int(0.8*len(tweetDict)):]
-	YTr20 = YTr[int(0.8*len(tweetDict)):]
+	fiftyAvg = 0
+	for i in range(100):
+		indices = np.array(range(len(tweetDict)))
+		np.random.shuffle(indices)
+		XTr = XTr[indices]
+		YTr = YTr[indices]
+		XTr80 = XTr[:int(0.8*len(tweetDict))]
+		YTr80 = YTr[:int(0.8*len(tweetDict))]
+		XTr20 = XTr[int(0.8*len(tweetDict)):]
+		YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-	clf = MultinomialNB()
-	clf.fit(XTr80, YTr80)
-	preds = clf.predict(XTr20)
-	#print(preds)
-	temp = (np.equal(preds,YTr20))
-	print(np.sum(temp)/temp.shape)
+		clf = MultinomialNB()
+		clf.fit(XTr80, YTr80)
+		preds = clf.predict(XTr20)
+		#print(preds)
+		temp = (np.equal(preds,YTr20))
+		fiftyAvg += (np.sum(temp)/temp.shape)
+	fiftyAvg/=100
+
+	print(fiftyAvg)
 
 	# clf = MultinomialNB()
 	# clf.fit(XTr, YTr)
