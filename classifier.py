@@ -33,9 +33,9 @@ def main():
 		YTr[i] = tweet[-2]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTr[i][wordDict[tw.lower()]] = 1
+				XTr[i][wordDict[tw.lower()]]+= 1
 			else:
-				XTr[i][c] = 1
+				XTr[i][c] += 1
 
 	testTweetDict = {}
 	idList = []
@@ -59,9 +59,9 @@ def main():
 		tWords = tweet[-1]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTe[i][wordDict[tw.lower()]] = 1
+				XTe[i][wordDict[tw.lower()]] += 1
 			else:
-				XTe[i][c] = 1
+				XTe[i][c] += 1
 
 
 	#print(XTe[0])
@@ -70,28 +70,28 @@ def main():
 	np.random.shuffle(indices)
 	XTr = XTr[indices]
 	YTr = YTr[indices]
-	# XTr80 = XTr[:int(0.8*len(tweetDict))]
-	# YTr80 = YTr[:int(0.8*len(tweetDict))]
-	# XTr20 = XTr[int(0.8*len(tweetDict)):]
-	# YTr20 = YTr[int(0.8*len(tweetDict)):]
-
-	# clf = MultinomialNB()
-	# clf.fit(XTr80, YTr80)
-	# preds = clf.predict(XTr20)
-	# #print(preds)
-	# temp = (np.equal(preds,YTr20))
-	#print(np.sum(temp)/temp.shape)
+	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	YTr20 = YTr[int(0.8*len(tweetDict)):]
 
 	clf = MultinomialNB()
-	clf.fit(XTr, YTr)
-	preds = clf.predict(XTe)
+	clf.fit(XTr80, YTr80)
+	preds = clf.predict(XTr20)
+	#print(preds)
+	temp = (np.equal(preds,YTr20))
+	print(np.sum(temp)/temp.shape)
+
+	# clf = MultinomialNB()
+	# clf.fit(XTr, YTr)
+	# preds = clf.predict(XTe)
 	#print(preds)
 
 	#print(preds)
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	with open('output.csv', 'w') as testfile:
+	with open('outputMult.csv', 'w') as testfile:
 		filewriter = csv.writer(testfile, delimiter=',')
 		filewriter.writerow(['ID','Label'])
 		for i, (id,pred) in enumerate(zip(idList,preds)):
