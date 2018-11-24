@@ -2,6 +2,7 @@ import csv
 import nltk
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 def main():
 
@@ -26,10 +27,7 @@ def main():
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
-
-	
-
-	XTr = np.zeros((len(tweetDict), c+4))
+	XTr = np.zeros((len(tweetDict), c+7))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -46,6 +44,11 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
+		sid = SentimentIntensityAnalyzer()
+		sentiments = sid.polarity_scores(tStr)
+		XTr[i][c+4] = sentiments['pos']
+		XTr[i][c+5] = sentiments['neg']
+		XTr[i][c+6] = sentiments['neu']
 		# s = tweet[2]
 		# hr = ((s.split(' '))[1].split(':'))[0]
 		# if hr in range(0,10):
@@ -76,7 +79,7 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+4))
+	XTe = np.zeros((len(testTweetDict), c+7))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
@@ -92,6 +95,11 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
+		sid = SentimentIntensityAnalyzer()
+		sentiments = sid.polarity_scores(tStr)
+		XTr[i][c+4] = sentiments['pos']
+		XTr[i][c+5] = sentiments['neg']
+		XTr[i][c+6] = sentiments['neu']
 		# s = tweet[2]
 		# hr = ((s.split(' '))[1].split(':'))[0]
 		# if hr in range(0,10):
