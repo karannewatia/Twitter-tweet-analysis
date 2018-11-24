@@ -26,7 +26,7 @@ def main():
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
-	XTr = np.zeros((len(tweetDict), c+1))
+	XTr = np.zeros((len(tweetDict), c+4))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -36,6 +36,15 @@ def main():
 				XTr[i][wordDict[tw.lower()]]+= 1
 			else:
 				XTr[i][c] += 1
+		tStr = tweet[0]
+		if tStr.find("\"") != -1:
+			XTr[i][c+1] = 1
+		if tStr.find("https") != -1:
+			XTr[i][c+2] = 1
+		if tStr.find("#") != -1:
+			XTr[i][c+3] = 1
+
+
 
 	testTweetDict = {}
 	idList = []
@@ -54,7 +63,7 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+1))
+	XTe = np.zeros((len(testTweetDict), c+4))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
@@ -62,6 +71,13 @@ def main():
 				XTe[i][wordDict[tw.lower()]] += 1
 			else:
 				XTe[i][c] += 1
+		tStr = tweet[0]
+		if tStr.find("\"") != -1:
+			XTr[i][c+1] = 1
+		if tStr.find("https") != -1:
+			XTr[i][c+2] = 1
+		if tStr.find("#") != -1:
+			XTr[i][c+3] = 1
 
 
 	#print(XTe[0])
