@@ -26,7 +26,10 @@ def main():
 					c += 1
 			tweetDict[id] = [text, favCount, created, retCount, label, words]
 
-	XTr = np.zeros((len(tweetDict), c+4))
+
+	
+
+	XTr = np.zeros((len(tweetDict), c+4+4))
 	YTr = np.zeros(len(tweetDict))
 	for i,(tweetId,tweet) in enumerate(tweetDict.items()):
 		tWords = tweet[-1]
@@ -43,6 +46,16 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
+		str = tweet[2]
+		hr = ((str.split(' '))[1].split(':'))[0]
+		if hr in range(0,10):
+			XTr[i][c+4] = 1
+		elif hr in range(10,17):
+			XTr[i][c+5] = 1
+		elif hr in range(17,21):
+			XTr[i][c+6] = 1
+		else:
+			XTr[i][c+7] = 1
 
 
 
@@ -63,12 +76,13 @@ def main():
 			idList.append(id)
 			testTweetDict[id] = [text, favCount, created, retCount, words]
 
-	XTe = np.zeros((len(testTweetDict), c+4))
+	XTe = np.zeros((len(testTweetDict), c+4+4))
 	for i,(tweetId,tweet) in enumerate(testTweetDict.items()):
 		tWords = tweet[-1]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTe[i][wordDict[tw.lower()]] += 1
+				if tw.lower() in ["i","my"]:
+					XTr[i][wordDict[tw.lower()]]+= 1
 			else:
 				XTe[i][c] += 1
 		tStr = tweet[0]
@@ -78,6 +92,16 @@ def main():
 			XTr[i][c+2] = 1
 		if tStr.find("#") != -1:
 			XTr[i][c+3] = 1
+		str = tweet[2]
+		hr = ((str.split(' '))[1].split(':'))[0]
+		if hr in range(0,10):
+			XTr[i][c+4] = 1
+		elif hr in range(10,17):
+			XTr[i][c+5] = 1
+		elif hr in range(17,21):
+			XTr[i][c+6] = 1
+		else:
+			XTr[i][c+7] = 1
 
 
 	#print(XTe[0])
