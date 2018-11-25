@@ -3,6 +3,7 @@ import nltk
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from sklearn.linear_model import RidgeClassifierCV
 
 def main():
 
@@ -112,37 +113,52 @@ def main():
 
 
 	# print(XTe[0])
-	fiftyAvg = 0
-	for i in range(100):
-		indices = np.array(range(len(tweetDict)))
-		np.random.shuffle(indices)
-		XTr = XTr[indices]
-		YTr = YTr[indices]
-		XTr80 = XTr[:int(0.8*len(tweetDict))]
-		YTr80 = YTr[:int(0.8*len(tweetDict))]
-		XTr20 = XTr[int(0.8*len(tweetDict)):]
-		YTr20 = YTr[int(0.8*len(tweetDict)):]
+	# fiftyAvg = 0
+	# for i in range(100):
+	# 	indices = np.array(range(len(tweetDict)))
+	# 	np.random.shuffle(indices)
+	# 	XTr = XTr[indices]
+	# 	YTr = YTr[indices]
+	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-		clf = MultinomialNB()
-		clf.fit(XTr80, YTr80)
-		preds = clf.predict(XTr20)
-		#print(preds)
-		temp = (np.equal(preds,YTr20))
-		fiftyAvg += (np.sum(temp)/temp.shape)
-	fiftyAvg/=100
+	# clf = MultinomialNB()
+	# clf.fit(XTr80, YTr80)
 
-	print(fiftyAvg)
+	# clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+
+	# preds = clf.predict(XTr20)
+	#
+	#
+	# 	#print(preds)
+	# 	temp = (np.equal(preds,YTr20))
+	# 	fiftyAvg += (np.sum(temp)/temp.shape)
+	# fiftyAvg/=100
+	#
+	# print(fiftyAvg)
 
 	# clf = MultinomialNB()
 	# clf.fit(XTr, YTr)
+
+	# clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
+
 	# preds = clf.predict(XTe)
-	#print(preds)
+
+	# counter = 0
+	# for i in preds:
+	# 	if i==-1:
+	# 		counter+=1
+	#
+	# print(counter)
+	# 	preds = clf.predict(XTr20)
 
 	#print(preds)
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	# with open('outputMark3.csv', 'w') as testfile:
+	# with open('outputMark4.csv', 'w') as testfile:
 	# 	filewriter = csv.writer(testfile, delimiter=',')
 	# 	filewriter.writerow(['ID','Label'])
 	# 	for i, (id,pred) in enumerate(zip(idList,preds)):
