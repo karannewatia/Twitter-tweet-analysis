@@ -34,9 +34,9 @@ def main():
 		YTr[i] = tweet[-2]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTr[i][wordDict[tw.lower()]] = 1
+				XTr[i][wordDict[tw.lower()]] += 1
 			else:
-				XTr[i][c] = 1
+				XTr[i][c] += 1
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
 			XTr[i][c+1] = 1
@@ -84,9 +84,9 @@ def main():
 		tWords = tweet[-1]
 		for tw in tWords:
 			if tw.lower() in wordDict:
-				XTe[i][wordDict[tw.lower()]] = 1
+				XTe[i][wordDict[tw.lower()]] += 1
 			else:
-				XTe[i][c] = 1
+				XTe[i][c] += 1
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
 			XTe[i][c+1] = 1
@@ -111,42 +111,42 @@ def main():
 			XTe[i][c+10] = 1
 
 
-	#print(XTe[0])
-	# fiftyAvg = 0
-	# for i in range(100):
-	# 	indices = np.array(range(len(tweetDict)))
-	# 	np.random.shuffle(indices)
-	# 	XTr = XTr[indices]
-	# 	YTr = YTr[indices]
-	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
-	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
-	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
-	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
+	# print(XTe[0])
+	fiftyAvg = 0
+	for i in range(100):
+		indices = np.array(range(len(tweetDict)))
+		np.random.shuffle(indices)
+		XTr = XTr[indices]
+		YTr = YTr[indices]
+		XTr80 = XTr[:int(0.8*len(tweetDict))]
+		YTr80 = YTr[:int(0.8*len(tweetDict))]
+		XTr20 = XTr[int(0.8*len(tweetDict)):]
+		YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-	# 	clf = MultinomialNB()
-	# 	clf.fit(XTr80, YTr80)
-	# 	preds = clf.predict(XTr20)
-	# 	#print(preds)
-	# 	temp = (np.equal(preds,YTr20))
-	# 	fiftyAvg += (np.sum(temp)/temp.shape)
-	# fiftyAvg/=100
+		clf = MultinomialNB()
+		clf.fit(XTr80, YTr80)
+		preds = clf.predict(XTr20)
+		#print(preds)
+		temp = (np.equal(preds,YTr20))
+		fiftyAvg += (np.sum(temp)/temp.shape)
+	fiftyAvg/=100
 
-	# print(fiftyAvg)
+	print(fiftyAvg)
 
-	clf = MultinomialNB()
-	clf.fit(XTr, YTr)
-	preds = clf.predict(XTe)
+	# clf = MultinomialNB()
+	# clf.fit(XTr, YTr)
+	# preds = clf.predict(XTe)
 	#print(preds)
 
 	#print(preds)
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	with open('outputMark2.csv', 'w') as testfile:
-		filewriter = csv.writer(testfile, delimiter=',')
-		filewriter.writerow(['ID','Label'])
-		for i, (id,pred) in enumerate(zip(idList,preds)):
-			filewriter.writerow([id,int(pred)])
+	# with open('outputMark3.csv', 'w') as testfile:
+	# 	filewriter = csv.writer(testfile, delimiter=',')
+	# 	filewriter.writerow(['ID','Label'])
+	# 	for i, (id,pred) in enumerate(zip(idList,preds)):
+	# 		filewriter.writerow([id,int(pred)])
 
 if __name__ == '__main__':
 	main()
