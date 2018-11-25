@@ -20,8 +20,7 @@ def readData(fName, isTraining):
 			if i == 0:
 				continue
 			tweet = tweet[0].strip('[').strip(']').split(',')
-			id, text, favCount, created, retCount = tweet[0],tweet[1],
-			tweet[3],tweet[5],tweet[12]
+			id, text, favCount, created, retCount = tweet[0],tweet[1],tweet[3],tweet[5],tweet[12]
 			if isTraining:
 				label = tweet[17]
 			words = nltk.word_tokenize(text)
@@ -81,30 +80,6 @@ def createYTr(tweetDict):
 	YTr = np.array([tweet[-2] for (tweetId,tweet) in tweetDict.items()])
 	return YTr
 
-def getFiftyAvg(tweetDict, XTr, YTr):
-
-	fiftyAvg = 0
-	for i in range(50):
-		indices = np.array(range(len(tweetDict)))
-		np.random.shuffle(indices)
-		XTr = XTr[indices]
-		YTr = YTr[indices]
-		XTr80 = XTr[:int(0.8*len(tweetDict))]
-		YTr80 = YTr[:int(0.8*len(tweetDict))]
-		XTr20 = XTr[int(0.8*len(tweetDict)):]
-		YTr20 = YTr[int(0.8*len(tweetDict)):]
-	
-		clf = LinearSVC(random_state=0, tol=1e-5)
-		#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
-		#clf = MultinomialNB()
-		clf.fit(XTr80, YTr80)
-		preds = clf.predict(XTr20)
-		temp = (np.equal(preds,YTr20))
-		fiftyAvg += (np.sum(temp)/temp.shape)
-	fiftyAvg/=50
-
-	return fiftyAvg
-
 def main():
 
 	tweetDict,wordDict,c = readData('train.csv',True)
@@ -114,8 +89,26 @@ def main():
 	testTweetDict, idList = readData('test.csv',False)
 	XTe = createX(testTweetDict, wordDict, c)
 
-	fiftyAvg = getFiftyAvg(tweetDict, XTr, YTr)
-	print(fiftyAvg)
+	# fiftyAvg = 0
+	# for i in range(50):
+	# 	indices = np.array(range(len(tweetDict)))
+	# 	np.random.shuffle(indices)
+	# 	XTr = XTr[indices]
+	# 	YTr = YTr[indices]
+	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
+	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
+	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
+	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
+	
+	# 	#clf = LinearSVC(random_state=0, tol=1e-5)
+	# 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+	# 	clf = MultinomialNB()
+	# 	clf.fit(XTr80, YTr80)
+	# 	preds = clf.predict(XTr20)
+	# 	temp = (np.equal(preds,YTr20))
+	# 	fiftyAvg += (np.sum(temp)/temp.shape)
+	# fiftyAvg/=50
+	# print(fiftyAvg)
 
 	 # clf = MultinomialNB()
 	 # clf.fit(XTr80, YTr80)
