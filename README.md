@@ -15,4 +15,8 @@ Submits:
 2) Just word occurence
 3) Word frequency + Sentiment analysis + quotes/http + I/My
 4) Word occurence + Sentiment analysis + quotes/http
-5) After fixing the XTe XTr issue, Word occurence + Sentiment analysis + quotes/http
+
+--- Fixed the XTe XTr issue ---
+
+5) Word occurence + Sentiment analysis + quotes/http
+6) Word frequency + Sentiment analysis + quotes/http
