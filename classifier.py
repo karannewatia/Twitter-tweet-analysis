@@ -124,20 +124,21 @@ def main():
 	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
 	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
 
-	# clf = MultinomialNB()
-	# clf.fit(XTr80, YTr80)
+	#  clf = MultinomialNB()
+	#  clf.fit(XTr80, YTr80)
 
-	# clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+	#  clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
 
-	# preds = clf.predict(XTr20)
+	#  preds = clf.predict(XTr20)
 	#
 	#
-	# 	#print(preds)
+	# 	print(preds)
 	# 	temp = (np.equal(preds,YTr20))
 	# 	fiftyAvg += (np.sum(temp)/temp.shape)
-	# fiftyAvg/=100
+	#   fiftyAvg/=100
 	#
 	# print(fiftyAvg)
+
 
 	# clf = MultinomialNB()
 	# clf.fit(XTr, YTr)
@@ -152,7 +153,6 @@ def main():
 	# 		counter+=1
 	#
 	# print(counter)
-	# 	preds = clf.predict(XTr20)
 
 	#print(preds)
 	#temp = (np.equal(preds,YTr20))
