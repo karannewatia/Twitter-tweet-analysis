@@ -5,6 +5,7 @@ from sklearn.naive_bayes import MultinomialNB
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn.linear_model import RidgeClassifierCV
 from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 
 def readData(fName, isTraining):
 	tweetDict = {}
@@ -89,26 +90,32 @@ def main():
 	testTweetDict, idList = readData('test.csv',False)
 	XTe = createX(testTweetDict, wordDict, c)
 
-	# fiftyAvg = 0
-	# for i in range(50):
-	# 	indices = np.array(range(len(tweetDict)))
-	# 	np.random.shuffle(indices)
-	# 	XTr = XTr[indices]
-	# 	YTr = YTr[indices]
-	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
-	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
-	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
-	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
-	
-	# 	#clf = LinearSVC(random_state=0, tol=1e-5)
-	# 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
-	# 	clf = MultinomialNB()
-	# 	clf.fit(XTr80, YTr80)
-	# 	preds = clf.predict(XTr20)
-	# 	temp = (np.equal(preds,YTr20))
-	# 	fiftyAvg += (np.sum(temp)/temp.shape)
-	# fiftyAvg/=50
-	# print(fiftyAvg)
+	fiftyAvg = 0
+	for i in range(100):
+		indices = np.array(range(len(tweetDict)))
+		np.random.shuffle(indices)
+		XTr = XTr[indices]
+		YTr = YTr[indices]
+
+		XTr80 = XTr[:int(0.8*len(tweetDict))]
+		YTr80 = YTr[:int(0.8*len(tweetDict))]
+
+		XTr20 = XTr[int(0.8*len(tweetDict)):]
+		YTr20 = YTr[int(0.8*len(tweetDict)):]
+
+		clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
+		#clf = LinearSVC(random_state=0, tol=1e-5)
+	 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+	 	#clf = MultinomialNB()
+
+		clf.fit(XTr80, YTr80)
+		preds = clf.predict(XTr20)
+
+		#temp = np.equal(preds,YTr20)
+		#fiftyAvg += (np.sum(temp)/preds.shape)
+		fiftyAvg += (np.sum(preds==YTr20)/preds.shape)
+	fiftyAvg/=100
+	print(fiftyAvg)
 
 	 # clf = MultinomialNB()
 	 # clf.fit(XTr80, YTr80)
@@ -119,15 +126,18 @@ def main():
 
 
 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
-	clf = LinearSVC(random_state=0, tol=1e-5)
-	clf.fit(XTr, YTr)
 
-	preds = clf.predict(XTe)
+	# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr[0]))), max_depth=100, random_state=0)
+	# #clf = LinearSVC(random_state=0, tol=1e-5)
+	# clf.fit(XTr, YTr)
+	#
+	# preds = clf.predict(XTe)
 
 	# counter = 0
 	# for i in preds:
-	# 	if i==-1:
+	# 	if i=='-1':
 	# 		counter+=1
+	# print(preds)
 	#
 	# print(counter)
 
@@ -135,11 +145,11 @@ def main():
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	with open('outputMark4.5.csv', 'w') as testfile:
-		filewriter = csv.writer(testfile, delimiter=',')
-		filewriter.writerow(['ID','Label'])
-		for i, (id,pred) in enumerate(zip(idList,preds)):
-			filewriter.writerow([id,int(pred)])
+	# with open('outputMark4.5.csv', 'w') as testfile:
+	# 	filewriter = csv.writer(testfile, delimiter=',')
+	# 	filewriter.writerow(['ID','Label'])
+	# 	for i, (id,pred) in enumerate(zip(idList,preds)):
+	# 		filewriter.writerow([id,int(pred)])
 
 if __name__ == '__main__':
 	main()
