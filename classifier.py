@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn.linear_model import RidgeClassifierCV
+from sklearn.svm import LinearSVC
 
 def main():
 
@@ -112,7 +113,6 @@ def main():
 			XTe[i][c+10] = 1
 
 
-	# print(XTe[0])
 	# fiftyAvg = 0
 	# for i in range(100):
 	# 	indices = np.array(range(len(tweetDict)))
@@ -123,29 +123,31 @@ def main():
 	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
 	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
 	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
-
-	#  clf = MultinomialNB()
-	#  clf.fit(XTr80, YTr80)
-
-	#  clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
-
-	#  preds = clf.predict(XTr20)
 	#
-	#
-	# 	print(preds)
+	# 	clf = LinearSVC(random_state=0, tol=1e-5)
+	# 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+	# 	#clf = MultinomialNB()
+	# 	clf.fit(XTr80, YTr80)
+	# 	preds = clf.predict(XTr20)
 	# 	temp = (np.equal(preds,YTr20))
 	# 	fiftyAvg += (np.sum(temp)/temp.shape)
-	#   fiftyAvg/=100
+	# fiftyAvg/=100
 	#
 	# print(fiftyAvg)
 
+	 # clf = MultinomialNB()
+	 # clf.fit(XTr80, YTr80)
+		#print(preds)
+
 
 	# clf = MultinomialNB()
-	# clf.fit(XTr, YTr)
 
-	# clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
 
-	# preds = clf.predict(XTe)
+	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
+	clf = LinearSVC(random_state=0, tol=1e-5)
+	clf.fit(XTr, YTr)
+
+	preds = clf.predict(XTe)
 
 	# counter = 0
 	# for i in preds:
@@ -158,11 +160,11 @@ def main():
 	#temp = (np.equal(preds,YTr20))
 	#print(np.sum(temp)/temp.shape)
 
-	# with open('outputMark4.csv', 'w') as testfile:
-	# 	filewriter = csv.writer(testfile, delimiter=',')
-	# 	filewriter.writerow(['ID','Label'])
-	# 	for i, (id,pred) in enumerate(zip(idList,preds)):
-	# 		filewriter.writerow([id,int(pred)])
+	with open('outputMark4.csv', 'w') as testfile:
+		filewriter = csv.writer(testfile, delimiter=',')
+		filewriter.writerow(['ID','Label'])
+		for i, (id,pred) in enumerate(zip(idList,preds)):
+			filewriter.writerow([id,int(pred)])
 
 if __name__ == '__main__':
 	main()
