@@ -48,8 +48,10 @@ def createX(tweetDict, wordDict, c):
 		tWords = tweet[-1]
 		for tw in tWords:
 			if tw.lower() in wordDict:
+
 				X[i][wordDict[tw.lower()]] += 1
 			else:
+
 				X[i][c] += 1
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
@@ -90,41 +92,41 @@ def main():
 	testTweetDict, idList = readData('test.csv',False)
 	XTe = createX(testTweetDict, wordDict, c)
 
-	# fiftyAvg = 0
-	# for i in range(100):
-	# 	indices = np.array(range(len(tweetDict)))
-	# 	np.random.shuffle(indices)
-	# 	XTr = XTr[indices]
-	# 	YTr = YTr[indices]
-	# 	XTr80 = XTr[:int(0.8*len(tweetDict))]
-	# 	YTr80 = YTr[:int(0.8*len(tweetDict))]
-	# 	XTr20 = XTr[int(0.8*len(tweetDict)):]
-	# 	YTr20 = YTr[int(0.8*len(tweetDict)):]
-	# 	#clf = LinearSVC(random_state=0, tol=1e-5)
-	#  	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
-	# 	clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
-	# 	clf.fit(XTr80, YTr80)
-	# 	# model = SelectFromModel(clf, threshold=1e-4, prefit=True)
-	# 	# XTr80 = model.transform(XTr80)
-	# 	# idx = model.get_support(True)
-	# 	# XTr20 = XTr20[:,idx]
-	# 	# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
-	# 	# clf.fit(XTr80, YTr80)
-	# 	preds = clf.predict(XTr20)
-	# 	#temp = np.equal(preds,YTr20)
-	# 	#fiftyAvg += (np.sum(temp)/preds.shape)
-	# 	fiftyAvg += (np.sum(preds==YTr20)/preds.shape)
-	# fiftyAvg/=100
-	# print(fiftyAvg)
+	fiftyAvg = 0
+	for i in range(100):
+		indices = np.array(range(len(tweetDict)))
+		np.random.shuffle(indices)
+		XTr = XTr[indices]
+		YTr = YTr[indices]
+		XTr80 = XTr[:int(0.8*len(tweetDict))]
+		YTr80 = YTr[:int(0.8*len(tweetDict))]
+		XTr20 = XTr[int(0.8*len(tweetDict)):]
+		YTr20 = YTr[int(0.8*len(tweetDict)):]
+		#clf = LinearSVC(random_state=0, tol=1e-5)
+	 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+		clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
+		clf.fit(XTr80, YTr80)
+		# model = SelectFromModel(clf, threshold=1e-4, prefit=True)
+		# XTr80 = model.transform(XTr80)
+		# idx = model.get_support(True)
+		# XTr20 = XTr20[:,idx]
+		# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
+		# clf.fit(XTr80, YTr80)
+		preds = clf.predict(XTr20)
+		#temp = np.equal(preds,YTr20)
+		#fiftyAvg += (np.sum(temp)/preds.shape)
+		fiftyAvg += (np.sum(preds==YTr20)/preds.shape)
+	fiftyAvg/=100
+	print(fiftyAvg)
 
 
 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
 
-	clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr[0]))), max_depth=100, random_state=0)
-	#clf = LinearSVC(random_state=0, tol=1e-5)
-
-	clf.fit(XTr, YTr)
-	preds = clf.predict(XTe)
+	# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr[0]))), max_depth=100, random_state=0)
+	# #clf = LinearSVC(random_state=0, tol=1e-5)
+	#
+	# clf.fit(XTr, YTr)
+	# preds = clf.predict(XTe)
 
 	# counter = 0
 	# for i in preds:
