@@ -53,6 +53,9 @@ def createX(tweetDict, wordDict, c):
 			else:
 
 				X[i][c] += 1
+        pos_tags = nltk.pos_tag()
+		
+
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
 			X[i][c+1] = 1
