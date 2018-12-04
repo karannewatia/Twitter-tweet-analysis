@@ -53,8 +53,8 @@ def createX(tweetDict, wordDict, c):
 			else:
 
 				X[i][c] += 1
-        pos_tags = nltk.pos_tag()
-		
+		#pos_tags = nltk.pos_tag()
+
 
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
@@ -87,7 +87,7 @@ def createYTr(tweetDict):
 	return YTr
 
 def main():
-	generatingSubmission = false
+	generatingSubmission = True
 
 	tweetDict,wordDict,c = readData('train.csv',True)
 	XTr = createX(tweetDict, wordDict, c)
@@ -132,23 +132,11 @@ def main():
 		clf.fit(XTr, YTr)
 		preds = clf.predict(XTe)
 
-		with open('outputMark9.csv', 'w') as testfile:
+		with open('outputMark.csv', 'w') as testfile:
 			filewriter = csv.writer(testfile, delimiter=',')
 			filewriter.writerow(['ID','Label'])
 			for i, (id,pred) in enumerate(zip(idList,preds)):
 				filewriter.writerow([id,int(pred)])
-
-	# counter = 0
-	# for i in preds:
-	# 	if i=='-1':
-	# 		counter+=1
-	# # print(preds)
-	#
-	# print(counter)
-
-	#print(preds)
-	#temp = (np.equal(preds,YTr20))
-	#print(np.sum(temp)/temp.shape)
 
 if __name__ == '__main__':
 	main()
