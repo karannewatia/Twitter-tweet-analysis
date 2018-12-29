@@ -55,6 +55,8 @@ def createX(tweetDict, wordDict, c):
 			else:
 				X[i][c] += 1
 
+
+
 		tStr = tweet[0]
 		if tStr.find("\"") != -1:
 			X[i][c+1] = 1
@@ -86,7 +88,7 @@ def createYTr(tweetDict):
 	return YTr
 
 def main():
-	# Change this boolean when you're alternating between testing 80 20 and generating a full submission
+
 	generatingSubmission = True
 
 	#numOfHashedFeatures = 256
@@ -100,7 +102,8 @@ def main():
 
 	if not generatingSubmission:
 		fiftyAvg = 0
-		for i in range(10):
+    
+		for i in range(100):
 			indices = np.array(range(len(tweetDict)))
 			np.random.shuffle(indices)
 			XTr = XTr[indices]
@@ -111,8 +114,11 @@ def main():
 			YTr20 = YTr[int(0.8*len(tweetDict)):]
 			#clf = LinearSVC(random_state=0, tol=1e-5)
 		 	#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr80, YTr80)
+
 			# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
-			clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.025, max_depth=3, random_state=0).fit(XTr80, YTr80)
+			#clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.025, max_depth=3, random_state=0).fit(XTr80, YTr80)
+			clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr80[0]))), max_depth=100, random_state=0)
+
 			clf.fit(XTr80, YTr80)
 			# model = SelectFromModel(clf, threshold=1e-4, prefit=True)
 			# XTr80 = model.transform(XTr80)
@@ -124,20 +130,28 @@ def main():
 			#temp = np.equal(preds,YTr20)
 			#fiftyAvg += (np.sum(temp)/preds.shape)
 			fiftyAvg += (np.sum(preds==YTr20)/preds.shape)
-		fiftyAvg/=10
+
+		fiftyAvg/=100
+
 		print(fiftyAvg)
 
 	else:
 		#clf = RidgeClassifierCV(alphas=[1e-3, 1e-2, 1e-1, 1]).fit(XTr, YTr)
+
 		# clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr[0]))), max_depth=100, random_state=0)
-		clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=0).fit(XTr, YTr)
+
 		# # #clf = LinearSVC(random_state=0, tol=1e-5)
 		# #
+
+		# #clf = LinearSVC(random_state=0, tol=1e-5)
+		clf = RandomForestClassifier(n_estimators=int(np.sqrt(len(XTr[0]))), max_depth=100, random_state=0)
 
 		clf.fit(XTr, YTr)
 		preds = clf.predict(XTe)
 
+
 		with open('outputMarkHashing.csv', 'w') as testfile:
+
 			filewriter = csv.writer(testfile, delimiter=',')
 			filewriter.writerow(['ID','Label'])
 			for i, (id,pred) in enumerate(zip(idList,preds)):
